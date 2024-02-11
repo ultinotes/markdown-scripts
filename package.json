@@ -12,31 +12,54 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "markdown.previewScripts": [
+      "./out/preview/index.js"
+    ],
     "commands": [
       {
         "command": "markdown-scripts.helloWorld",
         "title": "Hello World"
       }
-    ]
+    ],
+    "markdown.markdownItPlugins": true,
+    "configuration": {
+      "title": "Markdown Preview Script Support",
+      "properties": {
+        "markdown-scripts.languages": {
+          "order": 2,
+          "type": "array",
+          "default": [
+            "js-exec"
+          ],
+          "description": "Default languages in markdown."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "watch-scripts": "tsc -watch -p ./src/preview/",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.84.0",
+    "@types/markdown-it": "^13.0.7",
+    "@types/markdown-it-container": "^2.0.9",
     "@types/mocha": "^10.0.3",
     "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
-    "typescript": "^5.2.2",
-    "@vscode/test-electron": "^2.3.6"
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "markdown-it-container": "^4.0.0"
   }
 }
