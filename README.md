@@ -4,6 +4,18 @@ Make your Markdown interactive by embedding JS and Web Components
 
 This is the README for your extension "markdown-scripts". After writing up a brief description, we recommend including the following sections.
 
+## TODO
+- build as remark/rehype plugin
+- build as web extension
+- create new project: browser extension to annotate videos and podcasts
+
+## Development
+
+```
+nvm use
+npm run watch
+```
+
 ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.

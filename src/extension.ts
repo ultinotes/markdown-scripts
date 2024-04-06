@@ -3,6 +3,8 @@
 import * as vscode from "vscode";
 import * as mdItContainer from "markdown-it-container";
 
+const logger = vscode.window.createOutputChannel("test-log", { log: true });
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -11,6 +13,12 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(
     'Congratulations, your extension "markdown-scripts" is now active!'
   );
+
+  logger.clear();
+  logger.appendLine("Congrats");
+  logger.show(true);
+  logger.appendLine("Hello World");
+
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
@@ -29,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
   // register Markdown It plugin
   return {
     extendMarkdownIt(md: markdownit) {
-      extendMarkdownItWithMermaid(md, {
+      extendMarkdownItWithScripts(md, logger, {
         languageIds: () => {
           return vscode.workspace
             .getConfiguration("markdown-scripts") // ! keep in sync with name from package.json > configuration
@@ -46,21 +54,27 @@ export function deactivate() {}
 
 const blockName = "js-exec";
 
-function extendMarkdownItWithMermaid(
+function extendMarkdownItWithScripts(
   md: markdownit,
+  logger: vscode.LogOutputChannel,
   config: { languageIds(): readonly string[] }
 ) {
   const containerOpenTagType = "container_" + blockName + "_open";
   const containerCloseTagType = "container_" + blockName + "_close";
+
   md.use(mdItContainer.default, blockName, {
     anyClass: true,
     validate: (name: string) => {
+      // const logger = vscode.window.log
+      logger.appendLine("Validating name: "+ name);
+      vscode.window.showInformationMessage("Testing Debug "+logger);
+
+      console.log("validating");
+
       return name.trim() === blockName;
     },
     render: (tokens: any[], i: number) => {
       const token = tokens[i];
-      const logger = vscode.window.createOutputChannel("test-log");
-      logger.show();
 
       var src = "";
       // ! detects if a code block has been opened

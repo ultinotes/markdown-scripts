@@ -1,11 +1,205 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-    "files.exclude": {
-        "out": false // set this to true to hide the "out" folder with the compiled JS files
+  "atlascode.bitbucket.enabled": true,
+  "debug.console.fontSize": 14,
+  "debug.console.lineHeight": 20,
+  "diffEditor.renderSideBySide": false,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.detectIndentation": true,
+  "editor.fontFamily": "'Fira Code Retina',Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14,
+  "editor.fontWeight": "200",
+  "editor.guides.bracketPairs": true,
+  "editor.guides.bracketPairsHorizontal": true,
+  "editor.insertSpaces": true,
+  "editor.lineHeight": 1.65,
+  "editor.linkedEditing": true,
+  "editor.minimap.enabled": false,
+  "editor.minimap.maxColumn": 60,
+  "editor.minimap.showSlider": "always",
+  "editor.rulers": [
+    {
+      "color": "#222",
+      "column": 120
     },
-    "search.exclude": {
-        "out": true // set this to false to include "out" folder in search results
+    {
+      "color": "#000",
+      "column": 110
     },
-    // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-    "typescript.tsc.autoDetect": "off"
+    {
+      "color": "#000",
+      "column": 130
+    }
+  ],
+  "editor.selectionClipboard": false,
+  "editor.stickyScroll.enabled": true,
+  "editor.tabSize": 2,
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "keyword.control.import",
+          "keyword.control.import"
+        ],
+        "settings": {
+          "fontStyle": "bold",
+          "foreground": "#44f871"
+        }
+      },
+      {
+        "scope": [
+          "keyword.control.export",
+          "keyword.control.export"
+        ],
+        "settings": {
+          "fontStyle": "bold",
+          "foreground": "#ffd038"
+        }
+      },
+      {
+        "scope": [
+          "entity.name.type.alias",
+          "storage.type.type",
+          "meta.type.declaration",
+          "entity.name.type"
+        ],
+        "settings": {
+          "fontStyle": "bold",
+          "foreground": "#3ffc5e"
+        }
+      },
+      {
+        "scope": [
+          "meta.type.annotation",
+          "meta.type.parameters",
+          "support.type.primitive",
+          "keyword.operator.type.annotation"
+        ],
+        "settings": {
+          "fontStyle": "italic",
+          "foreground": "#6193c2"
+        }
+      },
+      {
+        "scope": "storage.type",
+        "settings": {
+          "foreground": "#008fc7"
+        }
+      },
+      {
+        "scope": [
+          "storage.modifier"
+        ],
+        "settings": {
+          "foreground": "#487d92"
+        }
+      },
+      {
+        "scope": [
+          "keyword.operator.type.annotation",
+          "meta.indexer.declaration"
+        ],
+        "settings": {}
+      }
+    ]
+  },
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120,
+  "editor.wrappingIndent": "same",
+  "files.associations": {
+    "*.mdx": "markdown",
+    "*.svg": "html"
+  },
+  "foam.files.ignore": [
+    "components/**/*"
+  ],
+  "foam.files.newNotePath": "currentDir",
+  "foam.files.notesExtensions": "mdx",
+  "foam.graph.style": {
+    "node": {
+      "block": "#B77EE8",
+      "book": "#6580F8",
+      "data": "#47FFA0",
+      "idea": "#47CBFF",
+      "image": "#404E04",
+      "index": "#F88F4F",
+      "insight": "#F55196",
+      "log": "#D4ED58",
+      "note": "#99E2FF",
+      "placeholder": "#4E2003",
+      "plan": "#FF6565",
+      "project": "#F74F4F",
+      "source": "#5672F0",
+      "tag": "#EA5DEA"
+    }
+  },
+  "foam.openDailyNote.directory": "Notes/12 LOGS/00 JOURNAL/",
+  "gitlens.defaultDateFormat": "DD MMM YYYY",
+  "gitlens.defaultTimeFormat": "HH:mm",
+  "highlight-matching-tag.highlightSelfClosing": true,
+  "indentRainbow.colors": [
+    "rgba(127,127,127,0.1)",
+    "rgba(0,0,0,0.1)"
+  ],
+  "indentRainbow.updateDelay": 200,
+  "javascript.autoClosingTags": false,
+  "markdown.experimental.editor.pasteLinks.enabled": true,
+  "markdown.preview.fontSize": 16,
+  "markdown.preview.lineHeight": 1.75,
+  "markdown.preview.scrollEditorWithPreview": false,
+  "markdown.preview.scrollPreviewWithEditor": false,
+  "markdown.styles": [
+    "./markdown.css"
+  ],
+  "mdx-preview.preview.previewOnChange": false,
+  "mdx-preview.preview.useVscodeMarkdownStyles": true,
+  "scm.inputFontSize": 14,
+  "separators.constructors.borderStyle": "dashed",
+  "separators.enabledSymbols": [],
+  "separators.functions.borderStyle": "dashed",
+  "separators.functions.ignoreCallbackInline": true,
+  "separators.methods.borderStyle": "dashed",
+  "separators.namespaces.borderStyle": "double",
+  "telemetry.telemetryLevel": "off",
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.lineHeight": 1.5,
+  "typescript.autoClosingTags": false,
+  "window.menuBarVisibility": "toggle",
+  "workbench.colorCustomizations": {
+    "editor.foreground": "#ffffff",
+    "editorBracketHighlight.foreground1": "#e8fa96",
+    "editorBracketHighlight.foreground2": "#bce3fa",
+    "editorBracketHighlight.foreground3": "#fab2d0",
+    "editorBracketHighlight.foreground4": "#b8f8d1",
+    "editorBracketHighlight.foreground5": "#f7c0f7",
+    "editorBracketHighlight.foreground6": "#c7efff",
+    "tree.indentGuidesStroke": "#f7c0f7",
+    "activityBar.activeBackground": "#003d80",
+    "activityBar.background": "#003d80",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#df006a",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#003d80",
+    "statusBar.background": "#00254d",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#003d80",
+    "statusBarItem.remoteBackground": "#00254d",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#00254d",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#00254d99",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.editor.wrapTabs": true,
+  "workbench.tree.indent": 20,
+  "workbench.tree.renderIndentGuides": "always",
+  "yaml.schemas": {
+    "file:///Users/AK/.vscode/extensions/atlassian.atlascode-2.10.11/resources/schemas/pipelines-schema.json": "bitbucket-pipelines.yml"
+  },
+  "peacock.color": "#00254d"
 }
