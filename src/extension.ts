@@ -62,6 +62,10 @@ function extendMarkdownItWithScripts(
   const containerOpenTagType = "container_" + blockName + "_open";
   const containerCloseTagType = "container_" + blockName + "_close";
 
+  // TODO: extract markdown-it parser into own project for separate testing
+  // TODO: create test runner script for markdown-it plugin
+  // TODO: because test runner wants to download VSCode
+  // TODO: --> create docker-image for testing
   md.use(mdItContainer.default, blockName, {
     anyClass: true,
     validate: (name: string) => {
@@ -75,6 +79,8 @@ function extendMarkdownItWithScripts(
     },
     render: (tokens: any[], i: number) => {
       const token = tokens[i];
+
+      console.log(token);
 
       var src = "";
       // ! detects if a code block has been opened
