@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import * as mdItContainer from "markdown-it-container";
+import { blockName, scriptPlugin } from "./markdown-it/scriptPlugin";
 
 const logger = vscode.window.createOutputChannel("test-log", { log: true });
 
@@ -52,56 +53,18 @@ export function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
-const blockName = "js-exec";
 
 function extendMarkdownItWithScripts(
   md: markdownit,
   logger: vscode.LogOutputChannel,
   config: { languageIds(): readonly string[] }
 ) {
-  const containerOpenTagType = "container_" + blockName + "_open";
-  const containerCloseTagType = "container_" + blockName + "_close";
 
   // TODO: extract markdown-it parser into own project for separate testing
   // TODO: create test runner script for markdown-it plugin
   // TODO: because test runner wants to download VSCode
   // TODO: --> create docker-image for testing
-  md.use(mdItContainer.default, blockName, {
-    anyClass: true,
-    validate: (name: string) => {
-      // const logger = vscode.window.log
-      logger.appendLine("Validating name: "+ name);
-      vscode.window.showInformationMessage("Testing Debug "+logger);
-
-      console.log("validating");
-
-      return name.trim() === blockName;
-    },
-    render: (tokens: any[], i: number) => {
-      const token = tokens[i];
-
-      console.log(token);
-
-      var src = "";
-      // ! detects if a code block has been opened
-      if (token.type === containerOpenTagType) {
-        // ! as long as no closing tag is discovered
-        for (var j = i + 1; j < tokens.length; j++) {
-          const value = tokens[j];
-          logger.appendLine(value);
-          if (value === undefined || value.type === containerCloseTagType) {
-            break;
-          }
-        }
-      }
-
-      if (token.nesting === 1) {
-        return `<div class="${blockName}">${src}`;
-      } else {
-        return "</div>";
-      }
-    },
-  });
+  md.use(mdItContainer.default, blockName, scriptPlugin);
 
   return md;
 }
