@@ -43,7 +43,8 @@
     "watch-scripts": "tsc -watch -p ./src/preview/",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/suite/runTest.js",
+    "test-plugin": "node ./out/test/markdown-it/index.js"
   },
   "devDependencies": {
     "@types/markdown-it": "^13.0.7",

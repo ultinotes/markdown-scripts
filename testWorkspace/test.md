@@ -45,7 +45,6 @@ class ExampleComponent extends HTMLElement {
 
   }
 
-  
 }
 ```
 
@@ -54,4 +53,12 @@ window.customElement.define('example-element', ExampleComponent);
 
 ```
 
+```mdscripts
+console.log('testing mdscripts');
+```
+
 <example-element />
+
+
+
+
