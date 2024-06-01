@@ -48,17 +48,15 @@ class ExampleComponent extends HTMLElement {
 }
 ```
 
-```js-exec
+```mdscript
 window.customElement.define('example-element', ExampleComponent);
 
 ```
 
-```mdscripts
+```mdscript
 console.log('testing mdscripts');
 ```
 
 <example-element />
-
-
 
 

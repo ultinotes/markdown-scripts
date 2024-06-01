@@ -4,6 +4,12 @@ import * as vscode from "vscode";
 import * as mdItContainer from "markdown-it-container";
 import { blockName, scriptPlugin } from "./markdown-it/scriptPlugin";
 
+let nonce = "";
+const logger = vscode.window.createOutputChannel("test-log", { log: true });
+const outputChannel = vscode.window.createOutputChannel("detector", {
+  log: true,
+});
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -12,8 +18,6 @@ export function activate(context: vscode.ExtensionContext) {
   console.log(
     'Congratulations, your extension "markdown-scripts" is now active!'
   );
-
-  const logger = vscode.window.createOutputChannel("test-log", { log: true });
 
   logger.clear();
   logger.appendLine("Congrats");
@@ -34,6 +38,66 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 
+  // vscode.workspace.onDidChangeTextDocument((event) => {
+  //   if (event.document.languageId === "markdown") {
+  //     logger.appendLine("markdown editor found");
+  //     logger.appendLine("=====================");
+  //     logger.show(true);
+  //     const webviewPanel = getMarkdownPreviewWebview(event.document.uri);
+  //     logger.appendLine(webviewPanel);
+  //     logger.show(true);
+  //     if (webviewPanel) {
+  //       nonce = webviewPanel.webview.cspSource;
+  //     }
+  //   }
+  // });
+
+  // // Function to check if the active editor is a Markdown preview
+  // function checkForMarkdownPreview() {
+  //   const activeEditor = vscode.window.activeTextEditor;
+  //   const visibleEditors = vscode.window.visibleTextEditors;
+
+  //   visibleEditors.forEach((editor) => {
+  //     outputChannel.appendLine("Checking Editor");
+  //     outputChannel.appendLine(editor.document.uri.scheme);
+  //     if (editor.document.uri.scheme === "vscode-webview") {
+  //       const webviewPanel = vscode.window.createWebviewPanel(
+  //         "markdownPreview",
+  //         "Markdown Preview",
+  //         vscode.ViewColumn.Beside,
+  //         {
+  //           enableScripts: true,
+  //         }
+  //       );
+  //       if (webviewPanel) {
+  //         const nonce = webviewPanel.webview.cspSource;
+  //         outputChannel.appendLine(
+  //           `Markdown preview opened with nonce: ${nonce}`
+  //         );
+  //       }
+  //     }
+  //   });
+  // }
+
+  // // Listen to changes in the active text editor
+  // vscode.window.onDidChangeActiveTextEditor(
+  //   checkForMarkdownPreview,
+  //   null,
+  //   context.subscriptions
+  // );
+
+  // // Listen to visible text editors changing
+  // vscode.window.onDidChangeVisibleTextEditors(
+  //   checkForMarkdownPreview,
+  //   null,
+  //   context.subscriptions
+  // );
+
+  // // Initial check for when the extension activates
+  // checkForMarkdownPreview();
+
+  outputChannel.appendLine("Markdown Preview Detector activated");
+
   // register Markdown It plugin
   return {
     extendMarkdownIt(md: markdownit) {
@@ -49,6 +113,21 @@ export function activate(context: vscode.ExtensionContext) {
     },
   };
 }
+
+// // Function to get the existing markdown preview webview
+// function getMarkdownPreviewWebview(
+//   uri: vscode.Uri
+// ): vscode.WebviewPanel | undefined {
+//   // VS Code's API to retrieve the existing markdown preview panel might need to be adapted
+//   const panels = vscode.window.visibleTextEditors.filter(
+//     (editor) => editor.document.uri.toString() === uri.toString()
+//   );
+//   if (panels.length > 0) {
+//     const webviewPanel = panels[0] as vscode.WebviewPanel;
+//     return webviewPanel;
+//   }
+//   return undefined;
+// }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}

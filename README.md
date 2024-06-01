@@ -4,10 +4,26 @@ Make your Markdown interactive by embedding JS and Web Components
 
 This is the README for your extension "markdown-scripts". After writing up a brief description, we recommend including the following sections.
 
+
+## Glossary
+
+### Extension
+
+VSCode Extension
+
+### Plugin
+
+Markdown-It Plugin
+
+
 ## TODO
 - build as remark/rehype plugin
 - build as web extension
 - create new project: browser extension to annotate videos and podcasts
+
+### Create Extensible Remark Preview
+
+
 
 ## Development
 
