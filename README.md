@@ -1,19 +1,12 @@
 # markdown-scripts
 Make your Markdown interactive by embedding JS and Web Components
 
+## Usage
 
-This is the README for your extension "markdown-scripts". After writing up a brief description, we recommend including the following sections.
+### VSCode / VSCodium
+With the [April 2024 Update](https://code.visualstudio.com/updates/v1_89#_local-workspace-extensions) extensions can be installed locally into a workspace.
 
-
-## Glossary
-
-### Extension
-
-VSCode Extension
-
-### Plugin
-
-Markdown-It Plugin
+- clone git repo into ./.vscode/extensions
 
 
 ## TODO

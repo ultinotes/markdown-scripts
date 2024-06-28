@@ -3,6 +3,8 @@
 import * as vscode from "vscode";
 import * as mdItContainer from "markdown-it-container";
 import { blockName, scriptPlugin } from "./markdown-it/scriptPlugin";
+import path from "path";
+import * as fs from "fs";
 
 let nonce = "";
 const logger = vscode.window.createOutputChannel("test-log", { log: true });
@@ -24,79 +26,63 @@ export function activate(context: vscode.ExtensionContext) {
   logger.show(true);
   logger.appendLine("Hello World");
 
-  // The command has been defined in the package.json file
-  // Now provide the implementation of the command with registerCommand
-  // The commandId parameter must match the command field in package.json
-  let disposable = vscode.commands.registerCommand(
-    "markdown-scripts.helloWorld",
+  const loadScriptCommand = vscode.commands.registerCommand(
+    "markdown-scripts.reloadScripts",
     () => {
-      vscode.window.showInformationMessage(
-        "Hello World from Markdown Scripts!"
-      );
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (!workspaceFolders) {
+        vscode.window.showErrorMessage("No workspace folder is open.");
+        return;
+      }
+
+      const workspacePath = workspaceFolders[0].uri.fsPath;
+
+      // Read the configured folder name
+      const config = vscode.workspace.getConfiguration("extension");
+      const scriptsFolder = config.get<string>("scriptsFolder", "scripts");
+      const scriptsPath = path.join(workspacePath, scriptsFolder);
+
+      fs.readdir(scriptsPath, (err, files) => {
+        if (err) {
+          vscode.window.showErrorMessage(
+            `Failed to read scripts directory: ${err.message}`
+          );
+          return;
+        }
+
+        const scriptUris = files
+          .filter((file) => file.endsWith(".js"))
+          .map((file) =>
+            vscode.Uri.file(path.join(scriptsPath, file)).toString()
+          );
+
+        if (scriptUris.length > 0) {
+          const previewScriptsConfig =
+            vscode.workspace.getConfiguration("markdown");
+          const currentScripts =
+            previewScriptsConfig.get<string[]>("previewScripts") || [];
+          const newScripts = [...currentScripts, ...scriptUris];
+          previewScriptsConfig.update(
+            "previewScripts",
+            newScripts,
+            vscode.ConfigurationTarget.Global
+          );
+          vscode.window.showInformationMessage(
+            `Added ${scriptUris.length} scripts from the "scripts" folder.`
+          );
+        } else {
+          vscode.window.showInformationMessage(
+            `No JavaScript files found in the "scripts" folder.`
+          );
+        }
+      });
     }
   );
 
-  context.subscriptions.push(disposable);
+  // Execute the command once when the extension is activated
+  // vscode.commands.executeCommand("markdown-scripts.reloadScripts");
 
-  // vscode.workspace.onDidChangeTextDocument((event) => {
-  //   if (event.document.languageId === "markdown") {
-  //     logger.appendLine("markdown editor found");
-  //     logger.appendLine("=====================");
-  //     logger.show(true);
-  //     const webviewPanel = getMarkdownPreviewWebview(event.document.uri);
-  //     logger.appendLine(webviewPanel);
-  //     logger.show(true);
-  //     if (webviewPanel) {
-  //       nonce = webviewPanel.webview.cspSource;
-  //     }
-  //   }
-  // });
-
-  // // Function to check if the active editor is a Markdown preview
-  // function checkForMarkdownPreview() {
-  //   const activeEditor = vscode.window.activeTextEditor;
-  //   const visibleEditors = vscode.window.visibleTextEditors;
-
-  //   visibleEditors.forEach((editor) => {
-  //     outputChannel.appendLine("Checking Editor");
-  //     outputChannel.appendLine(editor.document.uri.scheme);
-  //     if (editor.document.uri.scheme === "vscode-webview") {
-  //       const webviewPanel = vscode.window.createWebviewPanel(
-  //         "markdownPreview",
-  //         "Markdown Preview",
-  //         vscode.ViewColumn.Beside,
-  //         {
-  //           enableScripts: true,
-  //         }
-  //       );
-  //       if (webviewPanel) {
-  //         const nonce = webviewPanel.webview.cspSource;
-  //         outputChannel.appendLine(
-  //           `Markdown preview opened with nonce: ${nonce}`
-  //         );
-  //       }
-  //     }
-  //   });
-  // }
-
-  // // Listen to changes in the active text editor
-  // vscode.window.onDidChangeActiveTextEditor(
-  //   checkForMarkdownPreview,
-  //   null,
-  //   context.subscriptions
-  // );
-
-  // // Listen to visible text editors changing
-  // vscode.window.onDidChangeVisibleTextEditors(
-  //   checkForMarkdownPreview,
-  //   null,
-  //   context.subscriptions
-  // );
-
-  // // Initial check for when the extension activates
-  // checkForMarkdownPreview();
-
-  outputChannel.appendLine("Markdown Preview Detector activated");
+  context.subscriptions.push(loadScriptCommand);
 
   // register Markdown It plugin
   return {

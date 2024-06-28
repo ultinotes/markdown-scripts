@@ -32,6 +32,11 @@
             "js-exec"
           ],
           "description": "Default languages in markdown."
+        },
+        "markdown-scripts.scriptsFolder": {
+          "type": "string",
+          "default": "scripts",
+          "description": "The folder within the workspace from which to load scripts."
         }
       }
     }

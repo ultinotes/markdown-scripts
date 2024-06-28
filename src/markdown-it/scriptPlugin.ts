@@ -147,10 +147,36 @@ export const scriptPlugin = (
     self: any
   ): string {
     const token = tokens[idx];
-    return `<div class="mdscripts-src" style="opacity: 0.25">${md.utils.escapeHtml(token.content)}</div>`;
-    return `<script nonce="abcdefg">${md.utils.escapeHtml(
-      'console.log('+env.nonce+');'
-    )}</script>`;
+    return `<script>
+    setInterval(() => {
+
+      console.log('Hello World from the Script')
+    }, 1000);
+  </script>
+  <iframe srcdoc="
+    <!DOCTYPE html>
+    <html lang='en'>
+      <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>Embedded Content</title>
+        <!-- Allow scripts to execute -->
+        <meta http-equiv='Content-Security-Policy' content='script-src 'self' 'unsafe-inline';'>
+      </head>
+      <body>
+        <script>
+          setInterval(() => {
+
+            console.log('Hello World from the iFrame')
+          }, 1000);
+        </script>
+      </body>
+      </html>" sandbox="allow-scripts">
+    </iframe>`;
+    // return `<div class="mdscripts-src" style="opacity: 0.25">${md.utils.escapeHtml(token.content)}</div>`;
+    // return `<script nonce="abcdefg">${md.utils.escapeHtml(
+    //   'console.log('+env.nonce+');'
+    // )}</script>`;
     return `<script>${md.utils.escapeHtml(token.content)}</script>`;
   };
 };

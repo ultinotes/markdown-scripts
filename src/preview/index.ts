@@ -20,3 +20,5 @@ scripts.forEach((script) => {
   eval(script.innerText);
   console.log("evaluated: ", script.innerText);
 });
+
+// console.log('Files to import:', fs.readdirSync(path.join('./../../testWorkspace')));
