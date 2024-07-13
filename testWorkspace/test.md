@@ -7,6 +7,10 @@
 
 If the extension runs successfully you should see an alert pop up.
 
+<word-count>
+ Hello world
+</word-count>
+
 ```js-exec
 console.log("This is working nows");
 alert("hello");

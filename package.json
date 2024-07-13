@@ -13,7 +13,10 @@
   "main": "./out/extension.js",
   "contributes": {
     "markdown.previewScripts": [
-      "./out/preview/index.js"
+      "./out/preview/index.js",
+      "./out/preview/word-count.js",
+      "../../../webComponents/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
+      "../../../webComponents/out/bundle.js"
     ],
     "commands": [
       {
@@ -34,8 +37,10 @@
           "description": "Default languages in markdown."
         },
         "markdown-scripts.scriptsFolder": {
-          "type": "string",
-          "default": "scripts",
+          "type": "array",
+          "default": [
+            "./.vscode/extensions/markdown-scripts/out/preview/"
+          ],
           "description": "The folder within the workspace from which to load scripts."
         }
       }

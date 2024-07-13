@@ -1,25 +1,29 @@
-# markdown-scripts
-Make your Markdown interactive by embedding JS and Web Components
+# UltiNotes
+Make your VSCodes's Markdown interactive by embedding JS and Web Components.
 
-## Usage
+## How does it work?
 
-### VSCode / VSCodium
-With the [April 2024 Update](https://code.visualstudio.com/updates/v1_89#_local-workspace-extensions) extensions can be installed locally into a workspace.
+Visual Studio Code doesn't allow script inclusions by default. Scripts can only be added as static contributions by an extension.
+With the [April 2024 Update](https://code.visualstudio.com/updates/v1_89#_local-workspace-extensions) extensions can be installed locally into a workspace, so this extension provides a framework for users to add custom components to the Markdown Preview statically.
+
 
 - clone git repo into ./.vscode/extensions
 
 
-## TODO
-- build as remark/rehype plugin
-- build as web extension
-- create new project: browser extension to annotate videos and podcasts
-
-### Create Extensible Remark Preview
-
-
+## Roadmap
+- integrate with gun.js
+- add a UI to the extension to link folders with compiled components
+- central import script
+- obsidian plugin
+- maybe remark/rehype plugin
+- real time data sync
+- backup profiles to the cloud
+- autocomplete in markdown editor
+- static render to image or html --> publish static markdown to services like GitHub
+- support for lit, react, svelte, solid
+- official repository of components
 
 ## Development
-
 ```
 nvm use
 npm run watch
