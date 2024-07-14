@@ -42,6 +42,33 @@ export function activate(context: vscode.ExtensionContext) {
 
       const workspacePath = workspaceFolders[0].uri.fsPath;
 
+      const packageJsonPath =
+        "./.vscode/extensions/markdown-scripts/package.json";
+      const packageAbsolutePath = path.join(workspacePath, packageJsonPath);
+
+      // TODO: change into async read
+      const contentString = fs.readFileSync(packageAbsolutePath, "utf-8");
+      const contentJson = JSON.parse(contentString) as {
+        contributes: { "markdown.previewScripts": string[] };
+      };
+
+      logger.appendLine(
+        contentJson.contributes["markdown.previewScripts"].join(",")
+      );
+
+      contentJson.contributes["markdown.previewScripts"].push("./hello");
+
+      fs.writeFileSync(
+        packageAbsolutePath,
+        JSON.stringify(contentJson, undefined, 2)
+      );
+
+      // TODO: read settings
+      // TODO: check if path is file or folder --> compile list of files
+      // TODO: add file list to package.json as absolute path
+      // TODO: reload vscode
+      // TODO: check if all files exist on every reload and remove files that are missing
+
       // Read the configured folder name
       const config = vscode.workspace.getConfiguration("markdown-scripts");
       // TODO: add sane default
@@ -93,7 +120,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Execute the command once when the extension is activated
   vscode.commands.executeCommand("markdown-scripts.reloadScripts");
-
 
   context.subscriptions.push(loadScriptCommand);
 
