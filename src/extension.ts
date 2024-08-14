@@ -4,21 +4,27 @@ import * as vscode from "vscode";
 import * as mdItContainer from "markdown-it-container";
 // import { blockName, scriptPlugin } from "./markdown-it/scriptPlugin";
 import path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
+import { getSettings } from "./vscode-adapter";
 
 let nonce = "";
 const logger = vscode.window.createOutputChannel("test-log", { log: true });
-// const outputChannel = vscode.window.createOutputChannel("detector", {
-//   log: true,
-// });
 
+const standardScriptPaths = [
+  "./externalScripts/webcomponents/webcomponentsjs/webcomponents-loader.js",
+  "./externalScripts/gunjs/gun.js",
+  "./externalScripts/gunjs/sea.js",
+  "./out/preview/word-count.js",
+];
+
+const loadScriptsCommandName = "ultinotes-markdown-scripts.reloadScripts";
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
   console.log(
-    'Congratulations, your extension "markdown-scripts" is now active!'
+    'Congratulations, your extension "ultinotes-markdown-scripts" is now active!'
   );
 
   logger.clear();
@@ -26,13 +32,15 @@ export function activate(context: vscode.ExtensionContext) {
   logger.show(true);
   logger.appendLine("Hello World");
 
+  const absoluteExtensionPath = context.extensionPath;
+
   // TODO:
   // - read the registered paths from settings file
   // - write script files to package.json
   // - prompt user to reload (can we do it programmatically?)
   const loadScriptCommand = vscode.commands.registerCommand(
-    "markdown-scripts.reloadScripts",
-    () => {
+    loadScriptsCommandName,
+    async () => {
       logger.appendLine("Reloading Scripts");
       const workspaceFolders = vscode.workspace.workspaceFolders;
       if (!workspaceFolders) {
@@ -40,14 +48,17 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
+      vscode.window.showInformationMessage("Adding Scripts to VSCode");
+
       const workspacePath = workspaceFolders[0].uri.fsPath;
 
-      const packageJsonPath =
-        "./.vscode/extensions/markdown-scripts/package.json";
-      const packageAbsolutePath = path.join(workspacePath, packageJsonPath);
-
       // TODO: change into async read
-      const contentString = fs.readFileSync(packageAbsolutePath, "utf-8");
+      const contentString = await fs.readFile(
+        path.join(absoluteExtensionPath, "package.json"),
+        {
+          encoding: "utf-8",
+        }
+      );
       const contentJson = JSON.parse(contentString) as {
         contributes: { "markdown.previewScripts": string[] };
       };
@@ -56,117 +67,81 @@ export function activate(context: vscode.ExtensionContext) {
         contentJson.contributes["markdown.previewScripts"].join(",")
       );
 
-      contentJson.contributes["markdown.previewScripts"].push("./hello");
+      contentJson.contributes["markdown.previewScripts"] =
+        standardScriptPaths.map((p) => {
+          return p;
+        });
 
-      fs.writeFileSync(
-        packageAbsolutePath,
+      logger.appendLine("Rewriting setting paths");
+      // add all scripts from settings
+      contentJson.contributes["markdown.previewScripts"].push(
+        ...getSettings().addedScripts.map((p) => {
+          // paths must relate to extension root inside the extension
+          // but relate to workspace root inside settings
+          const relativePath = path.relative(
+            absoluteExtensionPath,
+            path.join(workspacePath, p)
+          );
+          logger.appendLine("Rewriting " + p + " to " + relativePath);
+          return relativePath;
+        })
+      );
+
+      await fs.writeFile(
+        path.join(absoluteExtensionPath, "package.json"),
         JSON.stringify(contentJson, undefined, 2)
       );
 
-      // TODO: read settings
       // TODO: check if path is file or folder --> compile list of files
       // TODO: add file list to package.json as absolute path
       // TODO: reload vscode
       // TODO: check if all files exist on every reload and remove files that are missing
 
-      // Read the configured folder name
-      const config = vscode.workspace.getConfiguration("markdown-scripts");
-      // TODO: add sane default
-      const scriptsFolder = config.get<string[]>("scriptsFolder", ["scripts"]);
-      scriptsFolder.forEach((scriptFolder) => {
-        const scriptsPath = path.join(workspacePath, scriptFolder);
+      // // Read the configured folder name
+      // const config = vscode.workspace.getConfiguration(
+      //   "ultinotes-markdown-scripts"
+      // );
+      // // TODO: add sane default
+      // const scriptsFolder = config.get<string[]>("scriptsFolder", ["scripts"]);
+      // scriptsFolder.forEach((scriptFolder) => {
+      //   const scriptsPath = path.join(workspacePath, scriptFolder);
 
-        fs.readdir(scriptsPath, (err, files) => {
-          if (err) {
-            vscode.window.showErrorMessage(
-              `Failed to read scripts directory: ${err.message}`
-            );
-            return;
-          }
+      //   fs.readdir(scriptsPath, (err , files) => {
+      //     if (err) {
+      //       vscode.window.showErrorMessage(
+      //         `Failed to read scripts directory: ${err.message}`
+      //       );
+      //       return;
+      //     }
 
-          const scriptUris = files
-            .filter((file) => file.endsWith(".js"))
-            .map((file) =>
-              vscode.Uri.file(path.join(scriptsPath, file)).toString()
-            );
+      //     const scriptUris = files
+      //       .filter((file) => file.endsWith(".js"))
+      //       .map((file) =>
+      //         vscode.Uri.file(path.join(scriptsPath, file)).toString()
+      //       );
 
-          if (scriptUris.length > 0) {
-            // const previewScriptsConfig =
-            //   vscode.workspace.getConfiguration("markdown");
-            // const currentScripts =
-            //   previewScriptsConfig.get<string[]>("previewScripts") || [];
-            // const newScripts = [...currentScripts, ...scriptUris];
-            // previewScriptsConfig.update(
-            //   "previewScripts",
-            //   newScripts,
-            //   vscode.ConfigurationTarget.Global
-            // );
+      //     if (scriptUris.length > 0) {
+      //       scriptUris.forEach(logger.appendLine);
+      //       logger.show(true);
 
-            scriptUris.forEach(logger.appendLine);
-            logger.show(true);
-
-            vscode.window.showInformationMessage(
-              `Added ${scriptUris.length} scripts from the "scripts" folder.`
-            );
-          } else {
-            vscode.window.showInformationMessage(
-              `No JavaScript files found in the "scripts" folder.`
-            );
-          }
-        });
-      });
+      //       vscode.window.showInformationMessage(
+      //         `Added ${scriptUris.length} scripts from the "scripts" folder.`
+      //       );
+      //     } else {
+      //       vscode.window.showInformationMessage(
+      //         `No JavaScript files found in the "scripts" folder.`
+      //       );
+      //     }
+      //   });
+      // });
     }
   );
 
   // Execute the command once when the extension is activated
-  vscode.commands.executeCommand("markdown-scripts.reloadScripts");
+  vscode.commands.executeCommand(loadScriptsCommandName);
 
   context.subscriptions.push(loadScriptCommand);
-
-  // register Markdown It plugin
-  // return {
-  //   extendMarkdownIt(md: markdownit) {
-  //     extendMarkdownItWithScripts(md, logger, {
-  //       languageIds: () => {
-  //         return [];
-  //         // return vscode.workspace
-  //         //   .getConfiguration("markdown-scripts") // ! keep in sync with name from package.json > configuration
-  //         //   .get<string[]>("languages", ["js-exec"]);
-  //       },
-  //     });
-  //     return md;
-  //   },
-  // };
 }
-
-// // Function to get the existing markdown preview webview
-// function getMarkdownPreviewWebview(
-//   uri: vscode.Uri
-// ): vscode.WebviewPanel | undefined {
-//   // VS Code's API to retrieve the existing markdown preview panel might need to be adapted
-//   const panels = vscode.window.visibleTextEditors.filter(
-//     (editor) => editor.document.uri.toString() === uri.toString()
-//   );
-//   if (panels.length > 0) {
-//     const webviewPanel = panels[0] as vscode.WebviewPanel;
-//     return webviewPanel;
-//   }
-//   return undefined;
-// }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
-
-// function extendMarkdownItWithScripts(
-//   md: markdownit,
-//   logger: vscode.LogOutputChannel,
-//   config?: { languageIds(): readonly string[] }
-// ) {
-//   // TODO: extract markdown-it parser into own project for separate testing
-//   // TODO: create test runner script for markdown-it plugin
-//   // TODO: because test runner wants to download VSCode
-//   // TODO: --> create docker-image for testing
-//   md.use(scriptPlugin, logger);
-
-//   return md;
-// }

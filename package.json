@@ -1,8 +1,8 @@
 {
-  "name": "markdown-scripts",
-  "displayName": "Markdown Scripts",
+  "name": "ultinotes-markdown-scripts",
+  "displayName": "UltiNotes - Markdown Scripts in VSCode",
   "description": "Make your Markdown interactive by embedding JS and Web Components",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -13,35 +13,25 @@
   "main": "./out/extension.js",
   "contributes": {
     "markdown.previewScripts": [
-      "./out/preview/index.js",
-      "./out/preview/word-count.js",
-      "../../../webComponents/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
-      "../../../webComponents/out/bundle.js"
     ],
     "commands": [
       {
-        "command": "markdown-scripts.helloWorld",
+        "command": "ultinotes-markdown-scripts.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "ultinotes-markdown-scripts.reloadScripts",
+        "title": "Reload Scripts"
       }
     ],
     "markdown.markdownItPlugins": true,
     "configuration": {
       "title": "Markdown Preview Script Support",
       "properties": {
-        "markdown-scripts.languages": {
-          "order": 2,
+        "ultinotes-markdown-scripts.addedScripts": {
           "type": "array",
-          "default": [
-            "js-exec"
-          ],
-          "description": "Default languages in markdown."
-        },
-        "markdown-scripts.scriptsFolder": {
-          "type": "array",
-          "default": [
-            "./.vscode/extensions/markdown-scripts/out/preview/"
-          ],
-          "description": "The folder within the workspace from which to load scripts."
+          "default": [],
+          "description": "List of files (relative to workspace root) containing scripts"
         }
       }
     }
