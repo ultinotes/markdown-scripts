@@ -13,6 +13,12 @@
   "main": "./out/extension.js",
   "contributes": {
     "markdown.previewScripts": [
+      "./externalScripts/webcomponents/webcomponentsjs/webcomponents-loader.js",
+      "./externalScripts/gunjs/gun.js",
+      "./externalScripts/gunjs/sea.js",
+      "./out/preview/word-count.js",
+      "../../../components/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
+      "../../../components/out/bundle.js"
     ],
     "commands": [
       {

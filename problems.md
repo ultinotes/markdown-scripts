@@ -1,5 +1,3 @@
 
-
-## Missing Markdown It documentation
-
-- ChatGPT did help
+TODO:
+- markdown theming? separate plugin?
