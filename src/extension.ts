@@ -7,9 +7,9 @@ import { getSettings } from "./vscode-adapter";
 const logger = vscode.window.createOutputChannel("test-log", { log: true });
 
 const standardScriptPaths = [
-  "./externalScripts/webcomponents/webcomponentsjs/webcomponents-loader.js",
-  "./externalScripts/gunjs/gun.js",
-  "./externalScripts/gunjs/sea.js",
+  "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
+  "./node_modules/gun/gun.js",
+  "./node_modules/gun/sea.js",
   "./out/preview/word-count.js",
 ];
 
@@ -57,7 +57,8 @@ export function activate(context: vscode.ExtensionContext) {
 
       logger.appendLine("Rewriting setting paths");
       // add all scripts from settings
-      contentJson.contributes["markdown.previewScripts"].push(
+      contentJson.contributes["markdown.previewScripts"] = [
+        ...standardScriptPaths,
         ...getSettings().addedScripts.map((p) => {
           // paths must relate to extension root inside the extension
           // but relate to workspace root inside settings
@@ -67,8 +68,8 @@ export function activate(context: vscode.ExtensionContext) {
           );
           logger.appendLine("Rewriting " + p + " to " + relativePath);
           return relativePath;
-        })
-      );
+        }),
+      ];
 
       await fs.writeFile(
         path.join(absoluteExtensionPath, "package.json"),
