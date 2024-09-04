@@ -1,7 +1,16 @@
 {
-	// See http://go.microsoft.com/fwlink/?LinkId=827846
-	// for the documentation about the extensions.json format
-	"recommendations": [
-		"dbaeumer.vscode-eslint"
-	]
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "editorconfig.editorconfig",
+    "usernamehw.errorlens",
+    "dbaeumer.vscode-eslint",
+    "foam.foam-vscode",
+    "github.github-vscode-theme",
+    "vincaslt.highlight-matching-tag",
+    "oderwat.indent-rainbow",
+    "esbenp.prettier-vscode",
+    "yoavbls.pretty-ts-errors",
+    "redhat.vscode-yaml",
+    "johnpapa.vscode-peacock"
+  ]
 }

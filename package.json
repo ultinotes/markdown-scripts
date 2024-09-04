@@ -1,8 +1,8 @@
 {
-  "name": "markdown-scripts",
-  "displayName": "Markdown Scripts",
+  "name": "ultinotes-markdown-scripts",
+  "displayName": "UltiNotes - Markdown Scripts in VSCode",
   "description": "Make your Markdown interactive by embedding JS and Web Components",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -12,31 +12,59 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "markdown.previewScripts": [
+      "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
+      "./node_modules/gun/gun.js",
+      "./node_modules/gun/sea.js",
+      "./out/preview/word-count.js",
+      "../../../components/out/bundle.js"
+    ],
     "commands": [
       {
-        "command": "markdown-scripts.helloWorld",
+        "command": "ultinotes-markdown-scripts.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "ultinotes-markdown-scripts.reloadScripts",
+        "title": "Reload Scripts"
       }
-    ]
+    ],
+    "markdown.markdownItPlugins": true,
+    "configuration": {
+      "title": "Markdown Preview Script Support",
+      "properties": {
+        "ultinotes-markdown-scripts.addedScripts": {
+          "type": "array",
+          "default": [],
+          "description": "List of files (relative to workspace root) containing scripts"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "watch-scripts": "tsc -watch -p ./src/preview/",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/suite/runTest.js",
+    "test-plugin": "node ./out/test/markdown-it/index.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.84.0",
     "@types/mocha": "^10.0.3",
     "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
-    "typescript": "^5.2.2",
-    "@vscode/test-electron": "^2.3.6"
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.8.0",
+    "gun": "^0.2020.1240"
   }
 }
