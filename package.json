@@ -52,8 +52,6 @@
     "test-plugin": "node ./out/test/markdown-it/index.js"
   },
   "devDependencies": {
-    "@types/markdown-it": "^13.0.7",
-    "@types/markdown-it-container": "^2.0.9",
     "@types/mocha": "^10.0.3",
     "@types/node": "18.x",
     "@types/vscode": "^1.84.0",
@@ -64,8 +62,5 @@
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "markdown-it-container": "^4.0.0"
   }
 }
