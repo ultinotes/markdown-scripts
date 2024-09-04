@@ -5,6 +5,7 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 // import * as myExtension from '../../extension';
 
+// ! currently defunct
 suite('Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
