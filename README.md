@@ -69,7 +69,7 @@ npm run watch-scripts
 
 ## Sponsorship
 
-This extension comes free of charge and is truely open-source, as it is licensed under BSD License. Read more details in [the license file](./LICENSE.md)
+This extension comes free of charge and is truely open-source, as it is licensed under BSD License. Read more details in [the license file](./LICENSE)
 
 It is the foundation of Ultinotes, so if you want to support my work, head over to the associated components repo and sponsor me there. Your support there will also benefit this repository.
 
