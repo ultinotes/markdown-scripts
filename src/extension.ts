@@ -3,12 +3,15 @@ import path from "path";
 import * as fs from "fs/promises";
 import { getSettings } from "./vscode-adapter";
 
+import * as mdItContainer from "markdown-it-container";
+import { blockName, scriptPlugin } from "./markdown-it/scriptPlugin";
+
 const logger = vscode.window.createOutputChannel("test-log", { log: true });
 
 const standardScriptPaths = [
   "./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js",
   "./node_modules/gun/gun.js",
-  "./node_modules/gun/sea.js",
+  // "./node_modules/gun/sea.js",
   "./out/preview/word-count.js",
 ];
 
@@ -23,6 +26,33 @@ export function activate(context: vscode.ExtensionContext) {
 
   const absoluteExtensionPath = context.extensionPath;
 
+  const docChangeDisposable = vscode.workspace.onDidChangeTextDocument(
+    (event) => {
+      const document = event.document;
+      const changes = event.contentChanges;
+
+      if (document.fileName.includes("ultinotes-markdown-scripts.test-log")) {
+        // omit changes in the test-log
+        return;
+      }
+
+      // Process the changes (e.g., send to the server)
+      // logger.appendLine(document.fileName);
+      changes.forEach((c) => {
+        // logger.appendLine("Range:  " + c.range.start.line);
+        // logger.appendLine("Range:  " + c.range.start.character);
+        // logger.appendLine("Range:  " + c.range.end.line);
+        // logger.appendLine("Range:  " + c.range.end.character);
+        // logger.appendLine("Length: " + c.rangeLength);
+        // logger.appendLine("Offset: " + c.rangeOffset);
+        // logger.appendLine("Text:   " + c.text);
+      });
+    }
+  );
+
+  context.subscriptions.push(docChangeDisposable);
+
+  // TODO: unpack components inside 'un' code-fence
   // TODO:
   // - prompt user to reload (can we do it programmatically?)
   const loadScriptCommand = vscode.commands.registerCommand(
@@ -82,7 +112,31 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.executeCommand(loadScriptsCommandName);
   context.subscriptions.push(loadScriptCommand);
+
+  return {
+    extendMarkdownIt(md: markdownit) {
+      extendMarkdownItWithScripts(md, logger, {
+        languageIds: () => {
+          return [];
+        },
+      });
+      return md;
+    },
+  };
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {}
+
+function extendMarkdownItWithScripts(
+  md: markdownit,
+  logger: vscode.LogOutputChannel,
+  config?: { languageIds(): readonly string[] }
+) {
+  // TODO: extract markdown-it parser into own project for separate testing
+  // TODO: create test runner script for markdown-it plugin
+  // TODO: because test runner wants to download VSCode
+  // TODO: --> create docker-image for testing
+  md.use(scriptPlugin, logger);
+  return md;
+}

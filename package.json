@@ -60,11 +60,15 @@
     "@vscode/test-electron": "^2.3.6",
     "eslint": "^8.52.0",
     "glob": "^10.3.10",
+    "license-checker": "^25.0.1",
     "mocha": "^10.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@types/markdown-it": "^13.0.7",
+    "@types/markdown-it-container": "^2.0.9"
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.8.0",
-    "gun": "^0.2020.1240"
+    "gun": "^0.2020.1240",
+    "markdown-it-container": "^4.0.0"
   }
 }
